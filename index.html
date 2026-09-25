@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kiểm định giả thuyết với các hộp bi</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <p class="eyebrow">Đề tài 2 · Bài tập nhóm</p>
+        <h1>Kiểm định giả thuyết với các hộp bi</h1>
+        <p class="intro">Nhập xác suất màu của từng hộp, rút bi nhiều lần <strong>có hoàn lại từ cùng một hộp</strong>, rồi xem dữ liệu ủng hộ giả thuyết nào.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="panel" aria-labelledby="setup-title">
+        <div class="section-heading">
+          <span class="step">1</span>
+          <div>
+            <h2 id="setup-title">Thiết lập các giả thuyết</h2>
+            <p>Mỗi Hᵢ nghĩa là “đã chọn hộp i”. Xác suất chọn hộp và xác suất các màu trong từng hộp đều phải có tổng bằng 1.</p>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="stepper" aria-label="Số hộp">
+            <span>Số hộp <small>(2–8)</small></span>
+            <button type="button" id="remove-box" aria-label="Giảm số hộp">−</button>
+            <output id="box-count">3</output>
+            <button type="button" id="add-box" aria-label="Tăng số hộp">+</button>
+          </div>
+          <div class="stepper" aria-label="Số màu">
+            <span>Số màu <small>(2–5)</small></span>
+            <button type="button" id="remove-color" aria-label="Giảm số màu">−</button>
+            <output id="color-count">2</output>
+            <button type="button" id="add-color" aria-label="Tăng số màu">+</button>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="input-table">
+            <thead id="probability-head"></thead>
+            <tbody id="probability-body"></tbody>
+          </table>
+        </div>
+        <p class="help">Nhập xác suất dạng thập phân: 0,8 nghĩa là 80%. <strong>Không nhập 1</strong> ở ô xác suất vì đó là 100%. Cho phép sai số làm tròn tổng ±0,001 và tự chuẩn hóa khi tính.</p>
+        <p id="shape-note" class="quiet" aria-live="polite"></p>
+      </section>
+
+      <section class="panel" aria-labelledby="data-title">
+        <div class="section-heading">
+          <span class="step">2</span>
+          <div>
+            <h2 id="data-title">Nhập dữ liệu quan sát</h2>
+            <p>Số bi quan sát là <strong>số lần rút</strong>, không phải xác suất. Có thể nhập 1 lần rút; tổng số lần rút từ 1 đến 30.</p>
+          </div>
+        </div>
+        <div id="observation-fields" class="observation-grid"></div>
+        <div class="test-settings">
+          <label>Giả thuyết gốc H₀
+            <select id="h0-select"></select>
+          </label>
+          <label>Mức ý nghĩa α
+            <input id="alpha-input" type="text" inputmode="decimal" autocomplete="off" value="0.05">
+          </label>
+        </div>
+        <p class="help hypothesis-note"><strong>H₀:</strong> dữ liệu theo tỉ lệ màu của hộp được chọn. <strong>H₁:</strong> dữ liệu không theo tỉ lệ màu ấy.</p>
+        <div class="actions">
+          <button type="button" class="primary" id="calculate">Tính kết quả</button>
+          <button type="button" class="secondary" id="sample-pdf">Nạp ví dụ PDF</button>
+          <button type="button" class="secondary" id="sample-reject">Nạp ví dụ bác bỏ H₀</button>
+        </div>
+        <p id="error" class="error" role="alert" hidden></p>
+      </section>
+
+      <section class="panel results" id="results" aria-labelledby="result-title" hidden>
+        <div class="section-heading">
+          <span class="step">3</span>
+          <div>
+            <h2 id="result-title">Kết quả kiểm định</h2>
+            <p>Hai cách nhìn từ cùng dữ liệu: hậu nghiệm Bayes và kiểm định chính xác dưới H₀.</p>
+          </div>
+        </div>
+        <div id="decision-card" class="decision-card">
+          <p class="eyebrow">Kiểm định chính xác</p>
+          <h3 id="decision-title"></h3>
+          <p id="decision-text"></p>
+          <div class="metric-grid">
+            <div><span>p-value</span><strong id="p-value"></strong></div>
+            <div><span>Mức ý nghĩa α</span><strong id="alpha-value"></strong></div>
+            <div><span>P(D | H₀)</span><strong id="observed-probability"></strong></div>
+          </div>
+        </div>
+        <div class="result-layout">
+          <div>
+            <h3>Hậu nghiệm Bayes</h3>
+            <p id="winner-text" class="help"></p>
+            <div id="posterior-bars"></div>
+          </div>
+          <div>
+            <h3>Thay số vào công thức</h3>
+            <div id="worked-formula" class="worked-formula"></div>
+          </div>
+        </div>
+        <p class="help result-note">p-value là xác suất gặp dữ liệu có xác suất không lớn hơn dữ liệu đã thấy <em>nếu H₀ đúng</em>. Nó không phải P(H₀ | D). Chưa bác bỏ H₀ cũng không chứng minh H₀ đúng.</p>
+      </section>
+
+      <section class="panel formula-panel" aria-labelledby="formula-title">
+        <div class="section-heading">
+          <span class="step">∑</span>
+          <div>
+            <h2 id="formula-title">Công thức và ý nghĩa ký hiệu</h2>
+            <p>Ứng dụng tính trực tiếp theo các công thức dưới đây.</p>
+          </div>
+        </div>
+        <div class="formula-grid">
+          <div class="formula-card">
+            <h3>1. Khả năng của dữ liệu</h3>
+            <p class="formula">Lᵢ = P(D | Hᵢ) = [n! / ∏ n<sub>c</sub>!] × ∏ p<sub>i,c</sub><sup>n<sub>c</sub></sup></p>
+            <p>Đây là phân bố đa thức vì các lần rút độc lập và có hoàn lại.</p>
+          </div>
+          <div class="formula-card">
+            <h3>2. Cập nhật Bayes</h3>
+            <p class="formula">P(Hᵢ | D) = πᵢ Lᵢ / ∑<sub>j</sub> πⱼ Lⱼ</p>
+            <p>Hộp có hậu nghiệm lớn nhất là hộp được dữ liệu ủng hộ nhiều nhất trong các hộp đã nhập.</p>
+          </div>
+          <div class="formula-card">
+            <h3>3. Kiểm định chính xác</h3>
+            <p class="formula">p-value = ∑ P(k | H₀)</p>
+            <p>Cộng trên mọi k có ∑ k<sub>c</sub> = n và P(k | H₀) ≤ P(D | H₀). Bác bỏ H₀ khi p-value ≤ α.</p>
+          </div>
+        </div>
+        <dl class="symbols">
+          <div><dt>Hᵢ, H₀</dt><dd>Giả thuyết đã chọn hộp i; H₀ là hộp đang được kiểm định.</dd></div>
+          <div><dt>D</dt><dd>Dữ liệu quan sát: số lần rút được từng màu.</dd></div>
+          <div><dt>πᵢ</dt><dd>Xác suất chọn hộp i trước khi nhìn dữ liệu (tiên nghiệm).</dd></div>
+          <div><dt>p<sub>i,c</sub></dt><dd>Xác suất rút màu c từ hộp i trong một lần rút.</dd></div>
+          <div><dt>n<sub>c</sub>, n</dt><dd>Số lần thấy màu c; n là tổng số lần rút.</dd></div>
+          <div><dt>Lᵢ</dt><dd>Khả năng thấy dữ liệu D nếu Hᵢ đúng.</dd></div>
+          <div><dt>α</dt><dd>Mức ý nghĩa do người dùng chọn, thường minh họa bằng 0,05.</dd></div>
+        </dl>
+      </section>
+    </main>
+    <footer class="container">Dựa trên ví dụ “Bayes – ba hộp bi” · Chạy trực tiếp trên trình duyệt, không cần cài thư viện.</footer>
+    <script src="math.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
