@@ -7,18 +7,18 @@
   const viNumber = new Intl.NumberFormat("vi-VN", { maximumFractionDigits: 6 });
   const viPercent = new Intl.NumberFormat("vi-VN", { style: "percent", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  function defaultState(rejectionExample) {
+  function defaultState() {
     return {
       colors: ["Đỏ", "Xanh"],
       priors: ["0.333333", "0.333333", "0.333333"],
       probabilities: [["0.8", "0.2"], ["0.5", "0.5"], ["0.2", "0.8"]],
-      counts: rejectionExample ? ["5", "0"] : ["1", "0"],
-      h0: rejectionExample ? 2 : 0,
+      counts: ["1", "0"],
+      h0: 0,
       alpha: "0.05",
     };
   }
 
-  let state = defaultState(false);
+  let state = defaultState();
 
   function element(tag, className, content) {
     const node = document.createElement(tag);
@@ -306,15 +306,9 @@
     }
   });
   $("calculate").addEventListener("click", calculate);
-  $("sample-pdf").addEventListener("click", () => {
-    state = defaultState(false);
-    $("shape-note").textContent = "Đã nạp ví dụ PDF: một lần rút được bi đỏ.";
-    renderInputs();
-    calculate();
-  });
-  $("sample-reject").addEventListener("click", () => {
-    state = defaultState(true);
-    $("shape-note").textContent = "Đã nạp ví dụ: 5 lần rút đều được bi đỏ.";
+  $("load-example").addEventListener("click", () => {
+    state = defaultState();
+    $("shape-note").textContent = "Đã điền ví dụ 3 hộp: quan sát 1 bi đỏ.";
     renderInputs();
     calculate();
   });
