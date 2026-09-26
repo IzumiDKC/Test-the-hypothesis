@@ -97,7 +97,7 @@
     }
     const n = counts.reduce((total, count) => total + count, 0);
     if (n < 1 || n > 30) {
-      throw new Error("Tổng số lần rút phải từ 1 đến 30 để tính p-value chính xác.");
+      throw new Error("Tổng số lần rút phải từ 1 đến 30.");
     }
     if (!Number.isInteger(h0) || h0 < 0 || h0 >= probabilities.length) {
       throw new Error("Hãy chọn một hộp hợp lệ cho H₀.");

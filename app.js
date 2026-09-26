@@ -232,7 +232,6 @@
   }
 
   function renderResult(result, colorNames) {
-    const h0Name = "H" + letter(result.h0);
     $("decision-card").classList.toggle("reject", result.reject);
     $("decision-title").textContent = result.reject
       ? "Bác bỏ H₀: hộp " + letter(result.h0)
@@ -269,8 +268,9 @@
     });
     const evidence = result.likelihoods.reduce((total, likelihood, index) => total + result.priors[index] * likelihood, 0);
     appendLine(worked, "P(D) = Σ πⱼLⱼ = " + result.priors.map((prior, index) => formatted(prior) + " × " + formatted(result.likelihoods[index])).join(" + ") + " = " + formatted(evidence) + ".");
-    appendLine(worked, "P(" + h0Name + " | D) = (" + formatted(result.priors[result.h0]) + " × " + formatted(result.likelihoods[result.h0]) + ") / " + formatted(evidence) + " = " + viPercent.format(result.posteriors[result.h0]) + ".");
-    appendLine(worked, "p-value dưới " + h0Name + " = " + formatted(result.pValue) + "; xét " + result.outcomes + " kết quả đếm màu có thể có và cộng các kết quả thỏa điều kiện.");
+    result.posteriors.forEach((posterior, index) => {
+      appendLine(worked, "P(H" + letter(index) + " | D) = (" + formatted(result.priors[index]) + " × " + formatted(result.likelihoods[index]) + ") / " + formatted(evidence) + " = " + viPercent.format(posterior) + ".");
+    });
     $("results").hidden = false;
   }
 
@@ -314,7 +314,7 @@
   });
   $("sample-reject").addEventListener("click", () => {
     state = defaultState(true);
-    $("shape-note").textContent = "Đã nạp ví dụ: kiểm định hộp C sau 5 lần rút đều được bi đỏ.";
+    $("shape-note").textContent = "Đã nạp ví dụ: 5 lần rút đều được bi đỏ.";
     renderInputs();
     calculate();
   });

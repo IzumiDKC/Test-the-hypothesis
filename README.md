@@ -1,6 +1,6 @@
 # Kiểm định giả thuyết thống kê: Hộp bi và màu bi
 
-Ứng dụng minh họa hai câu hỏi từ cùng một bộ dữ liệu:
+Bộ mã minh họa hai câu hỏi từ cùng một bộ dữ liệu. **Giao diện hiện trình bày phần Bayes; phần kiểm định chính xác vẫn có trong `math.js` và tài liệu công thức nhưng được ẩn khỏi trang web:**
 
 1. **Bayes:** Sau khi quan sát màu bi, khả năng đã chọn từng hộp là bao nhiêu?
 2. **Kiểm định giả thuyết:** Nếu giả sử bi được rút từ một hộp cụ thể, dữ liệu quan sát có đủ khác thường để bác bỏ giả sử đó ở mức ý nghĩa 5% không?
@@ -30,7 +30,7 @@ Trong [math.js](math.js), hàm `logMultinomialProbability` tính `Lᵢ`, các bi
 p-value = Σ P₀(x), với Σ꜀ x꜀ = n và P₀(x) ≤ P₀(x_quan_sát)
 ```
 
-Đây là cách xét “ít khả năng bằng hoặc hơn dữ liệu đã thấy” theo xác suất dưới `H₀`. Nếu `p-value ≤ α` thì bác bỏ `H₀`; ứng dụng đặt mặc định `α = 0,05` và cho phép người dùng đổi. Nếu p-value lớn hơn α, kết luận là **chưa đủ bằng chứng để bác bỏ `H₀`**. P-value **không phải** `P(H₀ | D)`; xác suất này do phần Bayes tính và phụ thuộc cả tiên nghiệm lẫn các hộp còn lại.
+Đây là cách xét “ít khả năng bằng hoặc hơn dữ liệu đã thấy” theo xác suất dưới `H₀`. Nếu `p-value ≤ α` thì bác bỏ `H₀`; mã đặt mặc định `α = 0,05`, còn ô chọn α đang được ẩn trên giao diện trình bày. Nếu p-value lớn hơn α, kết luận là **chưa đủ bằng chứng để bác bỏ `H₀`**. P-value **không phải** `P(H₀ | D)`; xác suất này do phần Bayes tính và phụ thuộc cả tiên nghiệm lẫn các hộp còn lại.
 
 Hàm `exactMultinomialPValue` trong [math.js](math.js) duyệt các cách đếm màu có tổng bằng `n` rồi cộng xác suất của những cách thỏa điều kiện trên.
 
@@ -41,7 +41,7 @@ Hàm `exactMultinomialPValue` trong [math.js](math.js) duyệt các cách đếm
 
 ## Chạy ứng dụng
 
-Mở `index.html` bằng trình duyệt, nhập cấu hình hộp bi và số lần quan sát từng màu, sau đó chọn hộp cần kiểm định. Không cần máy chủ hay cài thư viện.
+Mở `index.html` bằng trình duyệt, nhập cấu hình hộp bi và số lần quan sát từng màu để xem hậu nghiệm Bayes. Không cần máy chủ hay cài thư viện. Giải thích chi tiết từng tham số và phép kiểm định tham khảo nằm trong [CONG-THUC-AP-DUNG.md](CONG-THUC-AP-DUNG.md).
 
 Để chạy phần kiểm tra phép tính (cần Node.js):
 
@@ -53,9 +53,9 @@ node --test tests/math.test.js
 
 | Người | Thời gian | Nội dung |
 | --- | --- | --- |
-| 1 | 0–3 phút | Giới thiệu bài toán ba hộp bi, dữ liệu nhập và hai câu hỏi cần giải. |
-| 2 | 3–7 phút | Giải thích tiên nghiệm, khả năng dữ liệu, công thức Bayes; tính ví dụ một bi đỏ. |
-| 3 | 7–11 phút | Nêu `H₀`, `H₁`, mức ý nghĩa 5%, cách cộng xác suất để tìm p-value chính xác. |
-| 4 | 11–15 phút | Chạy demo một và năm bi đỏ, kết luận và nêu giới hạn của mô hình. |
+| 1 | 0–3 phút | Giới thiệu giả thuyết và vì sao cần dùng dữ liệu để kiểm chứng (slide 3–4). |
+| 2 | 3–7 phút | Giải thích tiên nghiệm, khả năng dữ liệu và công thức Bayes (slide 5–6). |
+| 3 | 7–11 phút | Thay số bài toán hai hộp để được hậu nghiệm 80%; giải thích hình dung 100 ván (slide 7–8). |
+| 4 | 11–15 phút | Mở rộng sang ba hộp và kết luận hậu nghiệm 53,33% / 33,33% / 13,33% (slide 9–10). |
 
 **Giới hạn:** Các lượt rút phải độc lập và có hoàn lại; tỉ lệ màu của từng hộp được xem là đã biết. Kết quả kiểm định chỉ đánh giá hộp được chọn làm `H₀`, không tự chứng minh hộp nào khác là đúng. Với mẫu nhỏ, p-value có thể lớn dù phân bố thực tế khác `H₀`.

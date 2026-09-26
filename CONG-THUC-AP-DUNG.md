@@ -15,9 +15,9 @@ Tài liệu này giải thích riêng phần toán học của ứng dụng. Ví
 | `n = Σ_c x_c` | Tổng số lần rút; từ 1 đến 30 trong ứng dụng. |
 | `D = (x_1, …, x_m)` | Toàn bộ dữ liệu quan sát, chỉ ghi số lần xuất hiện của mỗi màu, không ghi thứ tự rút. |
 | `L_i = P(D | H_i)` | Khả năng thấy dữ liệu D nếu đúng là đã chọn hộp i. |
-| `α` | Mức ý nghĩa của kiểm định; mặc định `0,05`, người dùng có thể đổi. |
+| `α` | Mức ý nghĩa của kiểm định trong mã; mặc định `0,05`. Ô nhập α hiện được ẩn khỏi giao diện trình bày. |
 
-**Điều kiện đầu vào:** `Σ_i π_i = 1` và với từng hộp `i`, `Σ_c p_{i,c} = 1`. Code cho phép sai số làm tròn tối đa `0,001`, sau đó chia lại cho tổng để chuẩn hóa. Giao diện yêu cầu `0 < π_i < 1`, `0 < p_{i,c} < 1`, `0 < α < 1`. Giá trị `1` bị cấm **ở ô xác suất** theo yêu cầu của bài; `1` trong ô số lần quan sát vẫn là một lần rút hợp lệ. Về mặt toán học, xác suất bằng 0 hoặc 1 vẫn có thể định nghĩa, nhưng chương trình loại các trường hợp ấy để tránh bài toán hiển nhiên.
+**Điều kiện đầu vào:** `Σ_i π_i = 1` và với từng hộp `i`, `Σ_c p_{i,c} = 1`. Code cho phép sai số làm tròn tối đa `0,001`, sau đó chia lại cho tổng để chuẩn hóa. Mã yêu cầu `0 < π_i < 1`, `0 < p_{i,c} < 1`, `0 < α < 1`. Giá trị `1` bị cấm **ở ô xác suất** theo yêu cầu của bài; `1` trong ô số lần quan sát vẫn là một lần rút hợp lệ. Về mặt toán học, xác suất bằng 0 hoặc 1 vẫn có thể định nghĩa, nhưng chương trình loại các trường hợp ấy để tránh bài toán hiển nhiên.
 
 ## 2. Công thức khả năng dữ liệu `L_i`
 
@@ -84,7 +84,7 @@ P(B | đỏ) = (0,2×0,5)/0,5 = 0,2 = 20%.
 
 Slide 8 diễn giải cùng kết quả bằng **100 ván chơi riêng biệt**, mỗi ván chọn lại hộp rồi rút một bi. Theo kỳ vọng, khoảng 50 ván chọn A và 50 ván chọn B; khoảng 40 ván từ A và 10 ván từ B cho bi đỏ. Theo tỉ lệ lý thuyết, phần bi đỏ đến từ A là `40/(40+10) = 80%`. Các số 50, 40, 10 là **giá trị kỳ vọng**, không bảo đảm đúng trong đúng 100 ván thực tế. Ứng dụng lại dùng **một hộp cố định** cho các lượt rút, nên không nhập 100 ván này vào ô số lần quan sát.
 
-Giao diện còn hiện kiểm định H₀, một phép tính **không có trên slide 7–8**. Với chính dữ liệu một bi đỏ và chọn `H₀ = B`, p-value là `0,2 > 0,05`: chưa bác bỏ B ở mức 5% dù hậu nghiệm A bằng 80%. Hai kết quả trả lời hai câu hỏi khác nhau.
+Mã còn tính kiểm định H₀, một phép tính **không có trên slide 7–8**; phần hiển thị của phép kiểm định đã được ẩn khỏi giao diện trình bày. Với chính dữ liệu một bi đỏ và chọn `H₀ = B`, p-value là `0,2 > 0,05`: chưa bác bỏ B ở mức 5% dù hậu nghiệm A bằng 80%. Hai kết quả trả lời hai câu hỏi khác nhau.
 
 ### Thay số đúng ví dụ PDF: một lần rút được bi đỏ
 
@@ -104,11 +104,11 @@ P(B | D) = [(1/3)×0,5] / 0,5 = 5/15 ≈ 33,33%.
 P(C | D) = [(1/3)×0,2] / 0,5 = 2/15 ≈ 13,33%.
 ```
 
-Đây là phần **suy luận Bayes** của ví dụ ba hộp; để trả lời đề tài “kiểm định giả thuyết thống kê”, ứng dụng còn thực hiện bước kiểm định dưới đây.
+Đây là phần **suy luận Bayes** của ví dụ ba hộp; trong mã vẫn có bước kiểm định dưới đây để tham khảo khi trả lời câu hỏi về đề tài “kiểm định giả thuyết thống kê”.
 
 ## 4. Giả thuyết kiểm định và p-value chính xác
 
-Người dùng chọn một hộp, chẳng hạn C, làm giả thuyết gốc:
+Khi xét phép kiểm định trong mã, ta chọn một hộp, chẳng hạn C, làm giả thuyết gốc:
 
 - `H₀`: dữ liệu được rút theo tỉ lệ màu của hộp C.
 - `H₁`: phân bố màu tạo ra dữ liệu khác tỉ lệ của hộp C.

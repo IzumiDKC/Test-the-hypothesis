@@ -59,7 +59,7 @@
           </div>
         </div>
         <div id="observation-fields" class="observation-grid"></div>
-        <div class="test-settings">
+        <div class="test-settings" hidden>
           <label>Giả thuyết gốc H₀
             <select id="h0-select"></select>
           </label>
@@ -67,11 +67,11 @@
             <input id="alpha-input" type="text" inputmode="decimal" autocomplete="off" value="0.05">
           </label>
         </div>
-        <p class="help hypothesis-note"><strong>H₀:</strong> dữ liệu theo tỉ lệ màu của hộp được chọn. <strong>H₁:</strong> dữ liệu không theo tỉ lệ màu ấy.</p>
+        <p class="help hypothesis-note" hidden><strong>H₀:</strong> dữ liệu theo tỉ lệ màu của hộp được chọn. <strong>H₁:</strong> dữ liệu không theo tỉ lệ màu ấy.</p>
         <div class="actions">
           <button type="button" class="primary" id="calculate">Tính kết quả</button>
           <button type="button" class="secondary" id="sample-pdf">Nạp ví dụ PDF</button>
-          <button type="button" class="secondary" id="sample-reject">Nạp ví dụ bác bỏ H₀</button>
+          <button type="button" class="secondary" id="sample-reject">Nạp ví dụ 5 bi đỏ</button>
         </div>
         <p id="error" class="error" role="alert" hidden></p>
       </section>
@@ -80,11 +80,11 @@
         <div class="section-heading">
           <span class="step">3</span>
           <div>
-            <h2 id="result-title">Kết quả kiểm định</h2>
-            <p>Hai cách nhìn từ cùng dữ liệu: hậu nghiệm Bayes và kiểm định chính xác dưới H₀.</p>
+            <h2 id="result-title">Kết quả Bayes</h2>
+            <p>Xác suất đã chọn từng hộp sau khi quan sát dữ liệu.</p>
           </div>
         </div>
-        <div id="decision-card" class="decision-card">
+        <div id="decision-card" class="decision-card" hidden>
           <p class="eyebrow">Kiểm định chính xác</p>
           <h3 id="decision-title"></h3>
           <p id="decision-text"></p>
@@ -105,10 +105,10 @@
             <div id="worked-formula" class="worked-formula"></div>
           </div>
         </div>
-        <p class="help result-note">p-value là xác suất gặp dữ liệu có xác suất không lớn hơn dữ liệu đã thấy <em>nếu H₀ đúng</em>. Nó không phải P(H₀ | D). Chưa bác bỏ H₀ cũng không chứng minh H₀ đúng.</p>
+        <p class="help result-note" hidden>p-value là xác suất gặp dữ liệu có xác suất không lớn hơn dữ liệu đã thấy <em>nếu H₀ đúng</em>. Nó không phải P(H₀ | D). Chưa bác bỏ H₀ cũng không chứng minh H₀ đúng.</p>
       </section>
 
-      <section class="panel formula-panel" aria-labelledby="formula-title">
+      <section class="panel formula-panel" aria-labelledby="formula-title" hidden>
         <div class="section-heading">
           <span class="step">∑</span>
           <div>
